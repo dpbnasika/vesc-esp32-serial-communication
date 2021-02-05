@@ -1,6 +1,6 @@
 
 /*
- * Vesc uart and esp32 integration
+ * VESC library ported for ESP32
  */
 #ifndef _VESCUART_h
 #define _VESCUART_h
@@ -8,14 +8,13 @@
 #include "datatypes.h"
 #include "buffer.h"
 #include "crc.h"
-#include <cstring>
-#include <iostream>
-
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
+#include "sdkconfig.h"
 #include "driver/uart.h"
 #include "driver/gpio.h"
 
-using namespace std;
-
+using namespace std; // @suppress("Symbol is not resolved")
 
 #ifndef RX2
 #define RX2 16
@@ -25,10 +24,11 @@ using namespace std;
 #define TX2 17
 #endif
 
-
 class VescUart
 {
-	/** Struct to store the telemetry data returned by the VESC */
+	/**
+	 *  Struct to store the telemetry data returned by the VESC
+	 */
 	struct dataPackage {
 		float tempFET;
 		float tempMotor;
@@ -93,7 +93,6 @@ class VescUart
 		void printVescValues(void);
 
 	private: 
-
 		/**
 		 * @brief      Packs the payload and sends it over Serial
 		 *
